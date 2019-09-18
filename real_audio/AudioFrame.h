@@ -1,15 +1,19 @@
 #ifndef H_AUDIO_FRAME
 #define H_AUDIO_FRAME
 
-
 #include "FrameData.h"
 #include <memory>
 
 
-typedef std::shared_ptr<FrameData> AudioFramePtr;
+class AudioFrame : public FrameData
+{
+public:
+	virtual ~AudioFrame(){}
+};
 
-AudioFramePtr makeAudioFrame();
 
+
+typedef std::shared_ptr<AudioFrame> AudioFramePtr;
 
 
 #endif //H_AUDIO_FRAME

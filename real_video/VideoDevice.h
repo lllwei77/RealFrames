@@ -50,7 +50,4 @@ private:
 typedef shared_ptr<VideoDevice> VideoDevicePtr;
 
 
-list<VideoDevicePtr> getVideoDeviceList();
-
-
 #endif //H_VIDEO_DEVICE

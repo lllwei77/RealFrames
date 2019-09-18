@@ -1,11 +1,11 @@
-#ifndef H_AUDIO_DECODER
-#define H_AUDIO_DECODER
-
+#ifndef AUDIO_ENCODER_AAC
+#define AUDIO_ENCODER_AAC
 
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "AudioFrame.h"
+
 
 #ifdef __cplusplus  
 extern "C"
@@ -26,29 +26,30 @@ extern "C"
 };
 #endif
 
+#pragma warning(disable:4996)
 
 
-class AudioDecoder
+class AudioEncoderAAC
 {
 private:
+	AVFrame *frame;
+	AVPacket *pkt;
 	const AVCodec *codec;
 	AVCodecContext *codecctx = NULL;
-	AVCodecParserContext *parser = NULL;
-	AVPacket *pkt;
-	AVFrame *frame = NULL;
-
-	char temp_data[1024 * 1024 * 2];
 
 	SwrContext *swr;
 
 public:
-	AudioDecoder();
-	~AudioDecoder();
+	AudioEncoderAAC();
+	~AudioEncoderAAC();
 
 	bool initialize();
-	bool decode(char *data_in, int size_in, char **data_out, int &size_out);
-	bool decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame);
+	int  getInputBuffSize();
+	bool encode(char *data_in, int size_in, char **data_out, int &size_out);
+	bool encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame);
+
 };
 
 
-#endif //H_AUDIO_DECODER
+
+#endif //AUDIO_ENCODER_AAC

@@ -75,8 +75,5 @@ private:
 
 typedef std::shared_ptr<VideoFrame> VideoFramePtr;
 
-VideoFramePtr makeVideoFrame();
-
-
 
 #endif //H_VIDEO_FRAME

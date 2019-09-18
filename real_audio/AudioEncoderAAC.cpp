@@ -1,4 +1,4 @@
-#include "AudioEncoder.h"
+#include "AudioEncoderAAC.h"
 
 
 
@@ -43,7 +43,7 @@ void addADTStoPacket(char* packet, int packetLen) {
 }
 
 
-AudioEncoder::AudioEncoder()
+AudioEncoderAAC::AudioEncoderAAC()
 {
 	frame = av_frame_alloc();
 	pkt = av_packet_alloc();
@@ -59,7 +59,7 @@ AudioEncoder::AudioEncoder()
 }
 
 
-AudioEncoder::~AudioEncoder()
+AudioEncoderAAC::~AudioEncoderAAC()
 {
 	av_frame_free(&frame);
 	av_packet_free(&pkt);
@@ -70,7 +70,7 @@ AudioEncoder::~AudioEncoder()
 }
 
 
-bool AudioEncoder::initialize()
+bool AudioEncoderAAC::initialize()
 {
 	codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
 	if (!codec) {
@@ -111,13 +111,13 @@ bool AudioEncoder::initialize()
 }
 
 
-int AudioEncoder::getInputBuffSize()
+int AudioEncoderAAC::getInputBuffSize()
 {
 	return codecctx->frame_size * 4;
 }
 
 
-bool AudioEncoder::encode(char *data_in, int size_in, char **data_out, int &size_out)
+bool AudioEncoderAAC::encode(char *data_in, int size_in, char **data_out, int &size_out)
 {
 	int ret;
 
@@ -179,7 +179,7 @@ bool AudioEncoder::encode(char *data_in, int size_in, char **data_out, int &size
 }
 
 
-bool AudioEncoder::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
+bool AudioEncoderAAC::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 {
 	int ret;
 
@@ -235,11 +235,10 @@ bool AudioEncoder::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 		int size_out = offset + 7;
 		addADTStoPacket(data_out, size_out);
 
-		outFrame = makeAudioFrame();
+		outFrame = std::make_shared<AudioFrame>();
 		outFrame->setData(data_out, size_out);
 		return true;
 	}
 
 	return false;
 }
-

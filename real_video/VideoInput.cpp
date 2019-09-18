@@ -147,7 +147,7 @@ void VideoInput::procCapture()
 			//Ë®Æ½·­×ª
 			yuv_flip(*pFrameYUV->data, pFrameYUV->width, pFrameYUV->height);
 
-			VideoFramePtr videoFrame = makeVideoFrame();
+			VideoFramePtr videoFrame = std::make_shared<VideoFrame>();
 			videoFrame->setAvFrame(pFrameYUV);
 			videoFrame->set_sws_scale_used();  //for patching memory leak~~~
 			captureQueue->force_put(videoFrame);

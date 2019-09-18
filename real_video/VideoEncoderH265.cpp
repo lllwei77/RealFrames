@@ -1,20 +1,20 @@
-#include "VideoEncoder.h"
+#include "VideoEncoderH265.h"
 #include<winsock2.h>
 
 
-VideoEncoder::VideoEncoder()
+VideoEncoderH265::VideoEncoderH265()
 {
 	//pFrame = av_frame_alloc();
 	pFormatCtx = avformat_alloc_context();
 }
 
 
-VideoEncoder::~VideoEncoder()
+VideoEncoderH265::~VideoEncoderH265()
 {
 }
 
 
-bool VideoEncoder::init(int width, int height)
+bool VideoEncoderH265::init(int width, int height)
 {
 	int in_w = width, in_h = height;
 
@@ -49,7 +49,7 @@ bool VideoEncoder::init(int width, int height)
 }
 
 
-AVPacket* VideoEncoder::encode(AVFrame *pFrame, int &i_counter, int &p_counter)
+AVPacket* VideoEncoderH265::encode(AVFrame *pFrame, int &i_counter, int &p_counter)
 {
 	AVPacket *pPacket = av_packet_alloc();
 
@@ -109,7 +109,7 @@ AVPacket* VideoEncoder::encode(AVFrame *pFrame, int &i_counter, int &p_counter)
 }
 
 
-bool VideoEncoder::encode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
+bool VideoEncoderH265::encode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
 {
 	int i_counter, p_counter;
 	AVPacket *packet = encode(inFrame->getAvFrame(), i_counter, p_counter);
@@ -118,7 +118,7 @@ bool VideoEncoder::encode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
 		return false;
 	}
 
-	outFrame = makeVideoFrame();
+	outFrame = std::make_shared<VideoFrame>();
 	outFrame->setAvPacket(packet);
 	outFrame->set_i_counter(i_counter);
 	outFrame->set_p_counter(p_counter);

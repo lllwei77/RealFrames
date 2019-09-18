@@ -18,7 +18,7 @@ AudioOutput::AudioOutput(AudioDevicePtr audioDevice):audioDevice(audioDevice) {
 void AudioOutput::procPlay()
 {
 	while (true) {
-		shared_ptr<FrameData> frameData;
+		AudioFramePtr frameData;
 		playQueue->get(frameData);
 
 		if (SDL_QueueAudio(dev, frameData->getData(), frameData->getSize()) < 0) {

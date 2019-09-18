@@ -28,7 +28,5 @@ private:
 typedef shared_ptr<AudioDevice> AudioDevicePtr;
 
 
-list<AudioDevicePtr> getAudioDeviceList(bool is_capture);
-
 
 #endif //H_AUDIO_DEVICE

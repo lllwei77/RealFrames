@@ -1,5 +1,5 @@
-#ifndef H_VIDEO_ENCODER
-#define H_VIDEO_ENCODER
+#ifndef H_VIDEO_ENCODER_H265
+#define H_VIDEO_ENCODER_H265
 
 #ifdef __cplusplus
 extern "C"
@@ -19,7 +19,7 @@ extern "C"
 
 
 
-class VideoEncoder
+class VideoEncoderH265
 {
 private:
 	AVFormatContext* pFormatCtx;
@@ -28,8 +28,8 @@ private:
 	//AVFrame *pFrame;
 
 public:
-	VideoEncoder();
-	~VideoEncoder();
+	VideoEncoderH265();
+	~VideoEncoderH265();
 	bool init(int width, int height);
 
 	bool encode(VideoFramePtr &inFrame, VideoFramePtr &outFrame);

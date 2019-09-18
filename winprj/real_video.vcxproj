@@ -19,17 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\real_video\VideoDecoder.cpp" />
+    <ClCompile Include="..\real_video\VideoDecoderH265.cpp" />
+    <ClCompile Include="..\real_video\VideoDecoderVP9.cpp" />
     <ClCompile Include="..\real_video\VideoDevice.cpp" />
-    <ClCompile Include="..\real_video\VideoEncoder.cpp" />
+    <ClCompile Include="..\real_video\VideoDeviceHelper.cpp" />
+    <ClCompile Include="..\real_video\VideoEncoderH265.cpp" />
+    <ClCompile Include="..\real_video\VideoEncoderVP9.cpp" />
     <ClCompile Include="..\real_video\VideoFrame.cpp" />
     <ClCompile Include="..\real_video\VideoInput.cpp" />
     <ClCompile Include="..\real_video\VideoOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\real_video\VideoDecoder.h" />
+    <ClInclude Include="..\real_video\VideoDecoderH265.h" />
+    <ClInclude Include="..\real_video\VideoDecoderVP9.h" />
     <ClInclude Include="..\real_video\VideoDevice.h" />
-    <ClInclude Include="..\real_video\VideoEncoder.h" />
+    <ClInclude Include="..\real_video\VideoDeviceHelper.h" />
+    <ClInclude Include="..\real_video\VideoEncoderH265.h" />
+    <ClInclude Include="..\real_video\VideoEncoderVP9.h" />
     <ClInclude Include="..\real_video\VideoFrame.h" />
     <ClInclude Include="..\real_video\VideoInput.h" />
     <ClInclude Include="..\real_video\VideoOutput.h" />

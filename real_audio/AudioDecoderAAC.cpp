@@ -1,8 +1,8 @@
-#include "AudioDecoder.h"
+#include "AudioDecoderAAC.h"
 
 
 
-AudioDecoder::AudioDecoder()
+AudioDecoderAAC::AudioDecoderAAC()
 {
 	frame = av_frame_alloc();
 	pkt = av_packet_alloc();
@@ -13,12 +13,12 @@ AudioDecoder::AudioDecoder()
 	av_opt_set_int(swr, "in_sample_rate", 44100, 0);
 	av_opt_set_int(swr, "out_sample_rate", 44100, 0);
 	av_opt_set_sample_fmt(swr, "in_sample_fmt", AV_SAMPLE_FMT_FLTP, 0);
-	av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16P, 0);
+	av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0);
 	int ret = swr_init(swr);
 }
 
 
-AudioDecoder::~AudioDecoder()
+AudioDecoderAAC::~AudioDecoderAAC()
 {
 	av_frame_free(&frame);
 	av_packet_free(&pkt);
@@ -26,7 +26,7 @@ AudioDecoder::~AudioDecoder()
 }
 
 
-bool AudioDecoder::initialize()
+bool AudioDecoderAAC::initialize()
 {
 	codec = avcodec_find_decoder(AV_CODEC_ID_AAC);
 
@@ -56,7 +56,7 @@ bool AudioDecoder::initialize()
 }
 
 
-bool AudioDecoder::decode(char *data_in, int size_in, char **data_out, int &size_out)
+bool AudioDecoderAAC::decode(char *data_in, int size_in, char **data_out, int &size_out)
 {
 	int ret;
 	int offset = 0;
@@ -114,6 +114,7 @@ bool AudioDecoder::decode(char *data_in, int size_in, char **data_out, int &size
 					offset += data_size;
 				}
 			}
+
 			samples_num += frame->nb_samples;
 			av_frame_unref(frame);
 		}
@@ -147,7 +148,7 @@ bool AudioDecoder::decode(char *data_in, int size_in, char **data_out, int &size
 }
 
 
-bool AudioDecoder::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
+bool AudioDecoderAAC::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 {
 	int ret;
 	int offset = 0;
@@ -171,7 +172,6 @@ bool AudioDecoder::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 
 		parse_left -= parsed;
 
-		int i, ch;
 		int data_size;
 
 		/* send the packet with the compressed data to the decoder */
@@ -198,6 +198,7 @@ bool AudioDecoder::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 				return false;
 			}
 
+			/*
 			for (i = 0; i < frame->nb_samples; i++) {
 				for (ch = 0; ch < codecctx->channels; ch++) {
 					//fwrite(frame->data[ch] + data_size*i, 1, data_size, outfile);
@@ -205,6 +206,12 @@ bool AudioDecoder::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 					offset += data_size;
 				}
 			}
+			*/
+
+			memcpy(temp_data, frame->data[0], frame->nb_samples*data_size * 2);
+			offset += frame->nb_samples*data_size * 2;
+
+
 			samples_num += frame->nb_samples;
 			av_frame_unref(frame);
 		}
@@ -233,9 +240,8 @@ bool AudioDecoder::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 	memcpy(*data_out, temp_data, offset);
 	size_out = offset;
 	*/
-	outFrame = makeAudioFrame();
+	outFrame = std::make_shared<AudioFrame>();
 	outFrame->setData(data_out, size_out);
 
 	return true;
 }
-

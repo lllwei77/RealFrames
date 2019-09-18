@@ -60,7 +60,7 @@ void AudioInput::procCapture()
 
 				memcpy(data, swap_buff, buff_size);
 
-				shared_ptr<FrameData> frameData = make_shared<FrameData>();
+				AudioFramePtr frameData = make_shared<AudioFrame>();
 				frameData->setData(data, len);
 
 				captureQueue->force_put(frameData);

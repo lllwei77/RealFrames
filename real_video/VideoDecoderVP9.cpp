@@ -1,29 +1,39 @@
-#include "VideoDecoder.h"
+#include "VideoDecoderVP9.h"
 #include<winsock2.h>
 
 
 
-VideoDecoder::VideoDecoder()
+VideoDecoderVP9::VideoDecoderVP9()
 {
 	pFormatCtx = avformat_alloc_context();
 }
 
 
-VideoDecoder::~VideoDecoder()
+VideoDecoderVP9::~VideoDecoderVP9()
 {
 
 }
 
 
-bool VideoDecoder::init()
+bool VideoDecoderVP9::init()
 {
-	pCodec = avcodec_find_decoder(AV_CODEC_ID_HEVC);
+	pCodec = avcodec_find_decoder(AV_CODEC_ID_VP9);
 	pCodecCtx = avcodec_alloc_context3(pCodec);
 
 	pCodecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
 	pCodecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
 
-	if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
+	AVDictionary *options = NULL;
+	if (pCodecCtx->codec_id == AV_CODEC_ID_VP9) {
+		//av_dict_set(&options, "x265-params", "qp=20", 0);
+		//av_dict_set(&options, "quality", "realtime", 0);
+		//av_dict_set(&options, "crf", "50", 0);
+		//av_dict_set(&options, "slices", "8", 0);
+		//av_dict_set(&options, "threads", "8", 0);
+		//av_dict_set(&options, "tune", "zero-latency", 0);
+	}
+
+	if (avcodec_open2(pCodecCtx, pCodec, &options) < 0) {
 		printf("Failed to open encoder! \n");
 		return false;
 	}
@@ -34,7 +44,7 @@ bool VideoDecoder::init()
 }
 
 
-AVFrame* VideoDecoder::decode(AVPacket *pPacket, int i_counter, int p_counter)
+AVFrame* VideoDecoderVP9::decode(AVPacket *pPacket, int i_counter, int p_counter)
 {
 	AVFrame* pFrame = av_frame_alloc();
 
@@ -76,7 +86,7 @@ AVFrame* VideoDecoder::decode(AVPacket *pPacket, int i_counter, int p_counter)
 }
 
 
-bool VideoDecoder::decode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
+bool VideoDecoderVP9::decode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
 {
 
 	AVFrame *frame = decode(inFrame->getAvPacket(), inFrame->get_i_counter(), inFrame->get_p_counter());
@@ -85,7 +95,7 @@ bool VideoDecoder::decode(VideoFramePtr &inFrame, VideoFramePtr &outFrame)
 		return false;
 	}
 
-	outFrame = makeVideoFrame();
+	outFrame = std::make_shared<VideoFrame>();
 	outFrame->setAvFrame(frame);
 
 	return true;

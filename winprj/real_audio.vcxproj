@@ -19,17 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\real_audio\AudioDecoder.cpp" />
+    <ClCompile Include="..\real_audio\AudioDecoderAAC.cpp" />
+    <ClCompile Include="..\real_audio\AudioDecoderOpus.cpp" />
     <ClCompile Include="..\real_audio\AudioDevice.cpp" />
-    <ClCompile Include="..\real_audio\AudioEncoder.cpp" />
+    <ClCompile Include="..\real_audio\AudioDeviceHelper.cpp" />
+    <ClCompile Include="..\real_audio\AudioEncoderAAC.cpp" />
+    <ClCompile Include="..\real_audio\AudioEncoderOpus.cpp" />
     <ClCompile Include="..\real_audio\AudioFrame.cpp" />
     <ClCompile Include="..\real_audio\AudioInput.cpp" />
     <ClCompile Include="..\real_audio\AudioOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\real_audio\AudioDecoder.h" />
+    <ClInclude Include="..\real_audio\AudioDecoderAAC.h" />
+    <ClInclude Include="..\real_audio\AudioDecoderOpus.h" />
     <ClInclude Include="..\real_audio\AudioDevice.h" />
-    <ClInclude Include="..\real_audio\AudioEncoder.h" />
+    <ClInclude Include="..\real_audio\AudioDeviceHelper.h" />
+    <ClInclude Include="..\real_audio\AudioEncoderAAC.h" />
+    <ClInclude Include="..\real_audio\AudioEncoderOpus.h" />
     <ClInclude Include="..\real_audio\AudioFrame.h" />
     <ClInclude Include="..\real_audio\AudioInput.h" />
     <ClInclude Include="..\real_audio\AudioOutput.h" />

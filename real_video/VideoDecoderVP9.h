@@ -1,5 +1,5 @@
-#ifndef H_VIDEO_DECODER
-#define H_VIDEO_DECODER
+#ifndef H_VIDEO_DECODER_VP9
+#define H_VIDEO_DECODER_VP9
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,7 +24,7 @@ extern "C"
 
 
 
-class VideoDecoder
+class VideoDecoderVP9
 {
 private:
 	AVFormatContext* pFormatCtx;
@@ -33,8 +33,8 @@ private:
 	AVCodecParserContext *parser = NULL;
 
 public:
-	VideoDecoder();
-	~VideoDecoder();
+	VideoDecoderVP9();
+	~VideoDecoderVP9();
 	bool init();
 
 	bool decode(VideoFramePtr &inFrame, VideoFramePtr &outFrame);

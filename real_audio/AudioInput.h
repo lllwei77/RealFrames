@@ -27,6 +27,11 @@ extern "C"
 
 
 
+#define FRAME_BYTENUM_AAC   (1024*2*2)
+#define FRAME_BYTENUM_OPUS  (960*2*2)
+
+
+
 class AudioInput
 {
 public:
@@ -34,7 +39,6 @@ public:
 	virtual ~AudioInput();
 
 public:
-
 	bool open();
 	void close();
 	void read(AudioFramePtr &audioFrame);
