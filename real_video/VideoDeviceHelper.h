@@ -2,13 +2,14 @@
 #define H_VIDEO_DEVICE_LIST
 
 #include "VideoDevice.h"
+#include <list>
 
 
 
 class VideoDeviceHelper
 {
 public:
-	static list<VideoDevicePtr> getDeviceList();
+	static std::list<VideoDevicePtr> getDeviceList();
 };
 
 

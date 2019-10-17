@@ -2,14 +2,14 @@
 #define H_AUDIO_DEVICE_LIST
 
 #include "AudioDevice.h"
-
+#include <list>
 
 
 class AudioDeviceHelper
 {
 public:
-	static list<AudioDevicePtr> getInputDeviceList();
-	static list<AudioDevicePtr> getOutputDeviceList();
+	static std::list<AudioDevicePtr> getInputDeviceList();
+	static std::list<AudioDevicePtr> getOutputDeviceList();
 };
 
 

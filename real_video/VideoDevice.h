@@ -1,11 +1,10 @@
 #ifndef H_VIDEO_DEVICE
 #define H_VIDEO_DEVICE
 
-
-#include <string>
+#include <memory>
 #include <list>
-using namespace std;
 
+#define VIDEO_DEVICE_NAME_LEN 256
 
 
 class VideoDeviceOption {
@@ -24,9 +23,11 @@ private:
 };
 
 
+class VideoDeviceHelper;
 
 class VideoDevice
 {
+	friend class VideoDeviceHelper;
 public:
 	VideoDevice(int device_id, const char *device_name);
 	virtual ~VideoDevice() {}
@@ -35,19 +36,19 @@ public:
 	char* getName() { return device_name; }
 	char* getFFName() { return device_ff_name; }
 
-	void addOption(int width, int height, int avg_time_perframe);
-	list<VideoDeviceOption>& getOptionList() { return deviceOptionList; }
+	std::list<VideoDeviceOption>& getOptionList() { return deviceOptionList; }
 
 private:
 	int  device_id;
 	char device_name[256];
 	char device_ff_name[256 + 6];  //"audio=xxx"
 
-	list<VideoDeviceOption> deviceOptionList;
+	void addOption(int width, int height, int avg_time_perframe);
+	std::list<VideoDeviceOption> deviceOptionList;
 };
 
 
-typedef shared_ptr<VideoDevice> VideoDevicePtr;
+typedef std::shared_ptr<VideoDevice> VideoDevicePtr;
 
 
 #endif //H_VIDEO_DEVICE

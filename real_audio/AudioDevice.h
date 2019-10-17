@@ -1,10 +1,9 @@
 #ifndef H_AUDIO_DEVICE
 #define H_AUDIO_DEVICE
 
+#include <memory>
+#define AUDIO_DEVICE_NAME_LEN 256
 
-#include <string>
-#include <list>
-using namespace std;
 
 
 class AudioDevice
@@ -19,13 +18,13 @@ public:
 
 private:
 	int  device_id;
-	char device_name[256];
-	char device_ff_name[256 + 6];  //"audio=xxx"
+	char device_name[AUDIO_DEVICE_NAME_LEN];
+	char device_ff_name[AUDIO_DEVICE_NAME_LEN + 6];  //"audio=xxx"
 
 };
 
 
-typedef shared_ptr<AudioDevice> AudioDevicePtr;
+typedef std::shared_ptr<AudioDevice> AudioDevicePtr;
 
 
 

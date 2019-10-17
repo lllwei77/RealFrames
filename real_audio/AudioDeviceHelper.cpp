@@ -1,11 +1,12 @@
 #include "AudioDeviceHelper.h"
 #include "Enviroment.h"
+#include <memory>
 
 
 
-list<AudioDevicePtr> getDeviceList(bool is_capture)
+static std::list<AudioDevicePtr> getDeviceList(bool is_capture)
 {
-	list<shared_ptr<AudioDevice>> deviceList;
+	std::list<std::shared_ptr<AudioDevice>> deviceList;
 	int iscapture = is_capture ? 1 : 0;
 
 	int i, count = SDL_GetNumAudioDevices(iscapture);
@@ -21,13 +22,14 @@ list<AudioDevicePtr> getDeviceList(bool is_capture)
 }
 
 
-list<AudioDevicePtr> AudioDeviceHelper::getInputDeviceList()
+std::list<AudioDevicePtr> AudioDeviceHelper::getInputDeviceList()
 {
 	return getDeviceList(true);
 }
 
 
-list<AudioDevicePtr> AudioDeviceHelper::getOutputDeviceList()
+std::list<AudioDevicePtr> AudioDeviceHelper::getOutputDeviceList()
 {
 	return getDeviceList(false);
 }
+

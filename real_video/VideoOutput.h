@@ -17,7 +17,7 @@ class VideoOutput
 {
 public:
 	VideoOutput(int width, int height);
-	VideoOutput(int winHdl, int width, int height);
+	VideoOutput(void* winHdl, int width, int height);
 	virtual ~VideoOutput() {}
 
 public:
@@ -33,7 +33,7 @@ private:
 	bool thread_stop;
 	void procPlay();
 
-	int winHdl;
+	void* winHdl;
 	int screen_w = 0, screen_h = 0;
 	SDL_Window *screen;
 	SDL_Renderer* sdlRenderer;

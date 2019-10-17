@@ -1,5 +1,4 @@
 #include "VideoDeviceHelper.h"
-#include "Enviroment.h"
 #include "Win_AVDevices.h"
 
 
@@ -15,10 +14,9 @@ char *_dup_wchar_to_utf8(const wchar_t *w)
 }
 
 
-
-list<VideoDevicePtr> getVideoDeviceList()
+std::list<VideoDevicePtr> VideoDeviceHelper::getDeviceList()
 {
-	list<shared_ptr<VideoDevice>> deviceList;
+	std::list<std::shared_ptr<VideoDevice>> deviceList;
 
 	HRESULT hrrst;
 	GUID guid = CLSID_VideoInputDeviceCategory;
@@ -28,22 +26,16 @@ list<VideoDevicePtr> getVideoDeviceList()
 	if (SUCCEEDED(hrrst)) {
 		for (int i = 0; i < videoDeviceVec.size(); i++) {
 			DeviceInfo deviceInfo = videoDeviceVec[i];
-			shared_ptr<VideoDevice> videoDevice = std::make_shared<VideoDevice>(i, _dup_wchar_to_utf8(deviceInfo.FriendlyName));
+			std::shared_ptr<VideoDevice> videoDevice = std::make_shared<VideoDevice>(i, _dup_wchar_to_utf8(deviceInfo.FriendlyName));
 
 			for (int i = 0; i < deviceInfo.paramCount; i++) {
 				DeviceParam &parm = deviceInfo.Params[i];
 				videoDevice->addOption(parm.width, parm.height, parm.avgTimePerFrame);
 			}
+
 			deviceList.push_back(videoDevice);
 		}
 	}
 
 	return deviceList;
-}
-
-
-
-list<VideoDevicePtr> VideoDeviceHelper::getDeviceList()
-{
-	return getVideoDeviceList();
 }

@@ -4,14 +4,14 @@
 
 
 VideoOutput::VideoOutput(int width, int height) {
-	this->winHdl = -1;
+	this->winHdl = nullptr;
 	playQueue = new FrameQueue<VideoFramePtr>(6);
 	screen_w = width;
 	screen_h = height;
 }
 
 
-VideoOutput::VideoOutput(int winHdl, int width, int height)
+VideoOutput::VideoOutput(void* winHdl, int width, int height)
 {
 	this->winHdl = winHdl;
 	screen_w = width;
