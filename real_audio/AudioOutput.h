@@ -17,14 +17,11 @@ class AudioOutput
 public:
 	AudioOutput();
 	AudioOutput(AudioDevicePtr audioDevice);
-
 	virtual ~AudioOutput() {}
-
-public:
 
 	bool open();
 	void close();
-	bool write(AudioFramePtr &audioFrame);
+	void write(AudioFramePtr &audioFrame);
 
 private:
 	AudioDevicePtr audioDevice;
@@ -32,7 +29,6 @@ private:
 	bool use_default;
 
 	FrameQueue<AudioFramePtr> *playQueue;
-
 
 	thread *threadPlay;
 	bool thread_stop;

@@ -1,13 +1,15 @@
 #include "AudioInput.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <memory>
 
 
 
-AudioInput::AudioInput(AudioDevicePtr audioDevice, unsigned int buff_size):audioDevice(audioDevice),buff_size(buff_size)
+AudioInput::AudioInput(AudioDevicePtr audioDevice, unsigned int bytes_per_frame):audioDevice(audioDevice),swap_buff_size(bytes_per_frame)
 {
 	captureQueue = new FrameQueue<AudioFramePtr>(6);
-	swap_buff = (char*)malloc(buff_size);
+	swap_buff = (char*)malloc(swap_buff_size);
+	assert(swap_buff);
 }
 
 
@@ -20,24 +22,24 @@ AudioInput::~AudioInput()
 
 void AudioInput::procCapture()
 {
+	pkt = av_packet_alloc();
+
 	while (true) {
 		if (thread_stop)
 			return;
 
 		int pkt_offset = 0;
 
-		pkt = av_packet_alloc();
 		if (av_read_frame(pFmtCtx, pkt) != 0) {
-			printf("read failed.\n");
+			//printf("read failed.\n");
 			return;
 		}
-
 
 		int pkt_remain = pkt->size;
 		bool ready = false;
 
 		while (pkt_remain > 0) {
-			int swap_remain = buff_size - swap_offset;
+			int swap_remain = swap_buff_size - swap_offset;
 
 			if (pkt_remain >= swap_remain) {
 				memcpy(swap_buff + swap_offset, pkt->data + pkt_offset, swap_remain);
@@ -55,22 +57,20 @@ void AudioInput::procCapture()
 			}
 
 			if (ready) {
-				char *data = (char*)malloc(buff_size);
-				int len = buff_size;
+				char *data = (char*)malloc(swap_buff_size);
+				int len = swap_buff_size;
 
-				memcpy(data, swap_buff, buff_size);
+				memcpy(data, swap_buff, swap_buff_size);
 
-				AudioFramePtr frameData = make_shared<AudioFrame>();
+				AudioFramePtr frameData = std::make_shared<AudioFrame>();
 				frameData->setData(data, len);
 
 				captureQueue->force_put(frameData);
 				swap_offset = 0;
 			}
-
 		}
-
-		av_packet_free(&pkt);
 	}
+	av_packet_free(&pkt);
 }
 
 
@@ -89,12 +89,12 @@ bool AudioInput::open()
 
 	int ret = avformat_open_input(&pFmtCtx, audioDevice->getFFName(), pAudioInputFmt, &options);
 	if (ret != 0) {
-		printf("ret=%d\n", ret);
+		//printf("ret=%d\n", ret);
 		return false;
 	}
 
 	thread_stop = false;
-	threadCapture = new thread(&AudioInput::procCapture, this);
+	threadCapture = new std::thread(&AudioInput::procCapture, this);
 
 	return true;
 }

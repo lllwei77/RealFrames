@@ -7,38 +7,20 @@
 #include "FrameQueue.h"
 #include <string>
 #include <list>
-
-using namespace std;
-
-#ifdef __cplusplus  
-extern "C"
-{
-#endif
-
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-#include "libavdevice/avdevice.h"
-#include "libavutil/audio_fifo.h"
-
-#ifdef __cplusplus
-};
-#endif
+#include <thread>
 
 
-
-#define FRAME_BYTENUM_AAC   (1024*2*2)
-#define FRAME_BYTENUM_OPUS  (960*2*2)
+#define BYTES_PER_FRAME_AAC   (1024*2*2)
+#define BYTES_PER_FRAME_OPUS  (960*2*2)
 
 
 
 class AudioInput
 {
 public:
-	AudioInput(AudioDevicePtr, unsigned int buff_size);
+	AudioInput(AudioDevicePtr, unsigned int bytes_per_frame);
 	virtual ~AudioInput();
 
-public:
 	bool open();
 	void close();
 	void read(AudioFramePtr &audioFrame);
@@ -50,11 +32,11 @@ private:
 	AVFormatContext *pFmtCtx;
 	AVPacket *pkt;
 
-	unsigned int buff_size;
+	unsigned int swap_buff_size;
 	int swap_offset = 0;
 	char *swap_buff;
 
-	thread *threadCapture;
+	std::thread *threadCapture;
 	bool thread_stop;
 	void procCapture();
 };

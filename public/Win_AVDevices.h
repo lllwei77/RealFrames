@@ -83,5 +83,9 @@ struct DeviceInfo {
 	guid = CLSID_AudioInputDeviceCategory;
 	std::vector<DeviceInfo> audioDeviceVec;
 	hrrst = DsGetAudioVideoInputDevices(audioDeviceVec, guid);
+
+	guid = CLSID_AudioRendererCategory;
+	std::vector<DeviceInfo> audioDeviceVec;
+	hrrst = DsGetAudioVideoInputDevices(audioDeviceVec, guid);
 */
 HRESULT DsGetAudioVideoInputDevices(std::vector<DeviceInfo>& deviceVec, REFGUID guidValue);

@@ -32,7 +32,7 @@ void testAudioOpus()
 		printf("input device[%d] : %s\n", audioDevice->getID(), audioDevice->getName());
 	}
 	AudioDevicePtr audioDevice = deviceList.front();
-	AudioInput *audioInput = new AudioInput(audioDevice, FRAME_BYTENUM_OPUS);
+	AudioInput *audioInput = new AudioInput(audioDevice, BYTES_PER_FRAME_OPUS);
 
 
 	list<AudioDevicePtr> deviceList2 = AudioDeviceHelper::getOutputDeviceList();
@@ -105,7 +105,7 @@ void testAudioAAC()
 		printf("input device[%d] : %s\n", audioDevice->getID(), audioDevice->getName());
 	}
 	AudioDevicePtr audioDevice = deviceList.front();
-	AudioInput *audioInput = new AudioInput(audioDevice, FRAME_BYTENUM_AAC);
+	AudioInput *audioInput = new AudioInput(audioDevice, BYTES_PER_FRAME_AAC);
 
 
 	list<AudioDevicePtr> deviceList2 = AudioDeviceHelper::getOutputDeviceList();
@@ -274,11 +274,11 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-	//testAudioAAC();
+	testAudioAAC();
 	//testAudioOpus();
 	
 	//testVideoH265();
-	testVideoVP9();
+	//testVideoVP9();
 
 	Enviroment::SDLDestory();
 

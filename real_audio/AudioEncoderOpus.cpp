@@ -11,10 +11,8 @@ AudioEncoderOpus::AudioEncoderOpus()
 	av_opt_set_int(swr, "in_channel_layout", AV_CH_LAYOUT_STEREO, 0);
 	av_opt_set_int(swr, "out_channel_layout", AV_CH_LAYOUT_STEREO, 0);
 	av_opt_set_int(swr, "in_sample_rate", 44100, 0);
-	//av_opt_set_int(swr, "out_sample_rate", 44100, 0);
 	av_opt_set_int(swr, "out_sample_rate", 48000, 0);
 	av_opt_set_sample_fmt(swr, "in_sample_fmt", AV_SAMPLE_FMT_S16, 0);
-	//av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_FLTP, 0);
 	av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
 	swr_init(swr);
 }
@@ -24,7 +22,8 @@ AudioEncoderOpus::~AudioEncoderOpus()
 {
 	av_frame_free(&frame);
 	av_packet_free(&pkt);
-	if (codecctx) avcodec_free_context(&codecctx);
+	if (codecctx) 
+		avcodec_free_context(&codecctx);
 
 	swr_close(swr);
 	swr_free(&swr);
@@ -47,11 +46,8 @@ bool AudioEncoderOpus::initialize()
 	}
 
 	codecctx->bit_rate = 64000;
-	//codecctx->sample_fmt = AV_SAMPLE_FMT_S16;  //s16 pcm
-	//codecctx->sample_fmt = AV_SAMPLE_FMT_FLTP;
 	codecctx->sample_fmt = AV_SAMPLE_FMT_FLT;  //for OPUS test
-	//codecctx->sample_rate = 44100;
-	codecctx->sample_rate = 48000;   //for OPUS test
+	codecctx->sample_rate = 48000;
 	codecctx->channel_layout = AV_CH_LAYOUT_STEREO;
 	codecctx->channels = 2;  //av_get_channel_layout_nb_channels(codecctx->channel_layout)
 
@@ -63,7 +59,6 @@ bool AudioEncoderOpus::initialize()
 	frame->nb_samples = codecctx->frame_size;
 	frame->format = codecctx->sample_fmt;
 	frame->channel_layout = codecctx->channel_layout;
-	//frame->channels = 2;
 
 	/* allocate the data buffers */
 	int ret = av_frame_get_buffer(frame, 0);
@@ -133,15 +128,6 @@ bool AudioEncoderOpus::encode(char *data_in, int size_in, char **data_out, int &
 	}
 
 	//av_frame_unref(frame);
-
-	/*
-	if (offset > 0) {
-		size_out = offset + 7;
-		addADTStoPacket(*data_out, size_out);
-		return true;
-	}
-	*/
-
 	return false;
 }
 
@@ -191,7 +177,6 @@ bool AudioEncoderOpus::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 			fprintf(stderr, "Overflow of output size\n");
 			return false;
 		}
-		//memcpy(data_out + 7 + offset, (char*)pkt->data, pkt->size);
 		memcpy(data_out + offset, (char*)pkt->data, pkt->size);
 		offset += pkt->size;
 		av_packet_unref(pkt);
@@ -200,8 +185,6 @@ bool AudioEncoderOpus::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 	//av_frame_unref(frame);
 
 	if (offset > 0) {
-		//int size_out = offset + 7;
-		//addADTStoPacket(data_out, size_out);
 		int size_out = offset;
 
 		outFrame = std::make_shared<AudioFrame>();

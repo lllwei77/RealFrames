@@ -242,3 +242,4 @@ bool AudioEncoderAAC::encode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 
 	return false;
 }
+

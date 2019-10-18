@@ -22,7 +22,7 @@ void AudioOutput::procPlay()
 		playQueue->get(frameData);
 
 		if (SDL_QueueAudio(dev, frameData->getData(), frameData->getSize()) < 0) {
-			printf("error queuing audio: %s\n", SDL_GetError());
+			//printf("error queuing audio: %s\n", SDL_GetError());
 			SDL_Delay(1);
 		}
 	}
@@ -81,8 +81,7 @@ void AudioOutput::close()
 }
 
 
-bool AudioOutput::write(AudioFramePtr &audioFrame)
+void AudioOutput::write(AudioFramePtr &audioFrame)
 {
 	playQueue->force_put(audioFrame);
-	return true;
 }
