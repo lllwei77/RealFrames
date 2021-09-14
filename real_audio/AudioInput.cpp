@@ -22,13 +22,14 @@ AudioInput::~AudioInput()
 
 void AudioInput::procCapture()
 {
-	pkt = av_packet_alloc();
+	//pkt = av_packet_alloc();
 
 	while (true) {
 		if (thread_stop)
 			return;
 
 		int pkt_offset = 0;
+		pkt = av_packet_alloc();
 
 		if (av_read_frame(pFmtCtx, pkt) != 0) {
 			//printf("read failed.\n");
@@ -57,6 +58,7 @@ void AudioInput::procCapture()
 			}
 
 			if (ready) {
+				
 				char *data = (char*)malloc(swap_buff_size);
 				int len = swap_buff_size;
 
@@ -67,10 +69,13 @@ void AudioInput::procCapture()
 
 				captureQueue->force_put(frameData);
 				swap_offset = 0;
+				
 			}
 		}
+
+		av_packet_free(&pkt);
 	}
-	av_packet_free(&pkt);
+	//av_packet_free(&pkt);
 }
 
 

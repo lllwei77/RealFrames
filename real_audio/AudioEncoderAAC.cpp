@@ -1,7 +1,6 @@
 #include "AudioEncoderAAC.h"
 
 
-
 /**
 *  Add ADTS header at the beginning of each and every AAC packet.
 *  This is needed as MediaCodec encoder generates a packet of raw
@@ -147,7 +146,7 @@ bool AudioEncoderAAC::encode(char *data_in, int size_in, char **data_out, int &s
 		return false;
 	}
 
-	/* read all the available output packets (in general there may be any
+	/* read all the available output packets (in general there may be any 
 	* number of them */
 	while (ret >= 0) {
 		ret = avcodec_receive_packet(codecctx, pkt);
@@ -157,7 +156,7 @@ bool AudioEncoderAAC::encode(char *data_in, int size_in, char **data_out, int &s
 			fprintf(stderr, "Error encoding audio frame\n");
 			return false;
 		}
-
+		
 		if (offset + pkt->size > malloc_size) {
 			fprintf(stderr, "Overflow of output size\n");
 			return false;

@@ -47,6 +47,16 @@ bool AudioDecoderAAC::initialize()
 		return false;
 	}
 
+	/**
+	codecctx->sample_rate = 48000;
+	codecctx->request_sample_fmt = AV_SAMPLE_FMT_FLT;    //need this!
+	codecctx->sample_fmt = AV_SAMPLE_FMT_FLT;
+
+	codecctx->channels = 2;
+	codecctx->request_channel_layout = AV_CH_LAYOUT_STEREO;
+	codecctx->channel_layout = AV_CH_LAYOUT_STEREO;
+	*/
+
 	if (avcodec_open2(codecctx, codec, NULL) < 0) {
 		fprintf(stderr, "Could not open codec\n");
 		return false;
@@ -109,7 +119,6 @@ bool AudioDecoderAAC::decode(char *data_in, int size_in, char **data_out, int &s
 
 			for (i = 0; i < frame->nb_samples; i++) {
 				for (ch = 0; ch < codecctx->channels; ch++) {
-					//fwrite(frame->data[ch] + data_size*i, 1, data_size, outfile);
 					memcpy(temp_data + offset, frame->data[ch] + data_size * i, data_size);
 					offset += data_size;
 				}
@@ -208,9 +217,10 @@ bool AudioDecoderAAC::decode(AudioFramePtr &inFrame, AudioFramePtr &outFrame)
 			}
 			*/
 
-			memcpy(temp_data, frame->data[0], frame->nb_samples*data_size * 2);
+			////memcpy(temp_data, frame->data[0], frame->nb_samples*data_size * 2);
 			offset += frame->nb_samples*data_size * 2;
-
+			memcpy(temp_data, frame->data[0], offset / 2);
+			memcpy(temp_data + offset / 2, frame->data[1], offset / 2);
 
 			samples_num += frame->nb_samples;
 			av_frame_unref(frame);

@@ -11,7 +11,7 @@ AudioDecoderOpus::AudioDecoderOpus()
 	av_opt_set_int(swr, "in_channel_layout", AV_CH_LAYOUT_STEREO, 0);
 	av_opt_set_int(swr, "out_channel_layout", AV_CH_LAYOUT_STEREO, 0);
 	//av_opt_set_int(swr, "in_sample_rate", 44100, 0);
-	av_opt_set_int(swr, "in_sample_rate", 48000, 0);
+	av_opt_set_int(swr, "in_sample_rate", 44100, 0);
 	av_opt_set_int(swr, "out_sample_rate", 44100, 0);
 	//av_opt_set_sample_fmt(swr, "in_sample_fmt", AV_SAMPLE_FMT_FLTP, 0);
 	av_opt_set_sample_fmt(swr, "in_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
@@ -51,10 +51,9 @@ bool AudioDecoderOpus::initialize()
 	}
 
 	//codecctx->bit_rate = 64000;
-	codecctx->sample_rate = 48000;
+	//codecctx->sample_rate = 48000;
 	codecctx->request_sample_fmt = AV_SAMPLE_FMT_FLT;    //need this!
 	//codecctx->sample_fmt = AV_SAMPLE_FMT_FLT;
-
 	codecctx->channels = 2;
 	//codecctx->request_channel_layout = AV_CH_LAYOUT_STEREO;
 	//codecctx->channel_layout = AV_CH_LAYOUT_STEREO;

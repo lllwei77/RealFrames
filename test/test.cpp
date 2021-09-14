@@ -154,6 +154,7 @@ void testAudioAAC()
 			printf("encode failed.\n");
 			//exit(-1);
 		}
+
 		else {
 			decInFrame = encOutFrame;
 			ret = audioDecoderAAC->decode(decInFrame, decOutFrame);
@@ -165,7 +166,7 @@ void testAudioAAC()
 				audioOutput->write(decOutFrame);
 			}
 		}
-
+		
 	}
 
 }
@@ -274,10 +275,10 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-	testAudioAAC();
+	//testAudioAAC();
 	//testAudioOpus();
 	
-	//testVideoH265();
+	testVideoH265();
 	//testVideoVP9();
 
 	Enviroment::SDLDestory();
